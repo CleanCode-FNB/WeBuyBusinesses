@@ -52,7 +52,7 @@ public class Sell {
     public String getIndustry () { return industry; }
     public void setIndustry(String industry) { this.industry = industry; }
 
-    public String getDescription() { return description; }
+    public String getDescription () { return description; }
     public void setDescription(String description) { this.description = description; }
 
     // Image Upload Feature
