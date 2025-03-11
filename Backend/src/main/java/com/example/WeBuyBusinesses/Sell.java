@@ -46,7 +46,7 @@ public class Sell {
     public int getCustomerStatistics () { return customerStatistics; }
     public void setCustomerStatistics(int customerStatistics) { this.customerStatistics = customerStatistics; }
 
-    public String getLocation() { return location; }
+    public String getLocation () { return location; }
     public void setLocation(String location) { this.location = location; }
 
     public String getIndustry() { return industry; }
