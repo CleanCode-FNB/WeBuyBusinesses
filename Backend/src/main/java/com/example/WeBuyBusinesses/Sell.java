@@ -15,7 +15,7 @@ public class Sell {
     private List<String> imageUrls;
     private List<String> messages;
 
-    // Constructor
+    //Constructor
     public Sell(double price, double annualProfits, String registrationCode, int numberOfEmployees,
                 int customerStatistics, String location, String industry, String description) {
         this.price = price;
