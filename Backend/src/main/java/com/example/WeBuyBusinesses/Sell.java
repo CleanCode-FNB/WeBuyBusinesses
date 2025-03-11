@@ -40,7 +40,7 @@ public class Sell {
     public String getRegistrationCode () { return registrationCode; }
     public void setRegistrationCode(String registrationCode) { this.registrationCode = registrationCode; }
 
-    public int getNumberOfEmployees() { return numberOfEmployees; }
+    public int getNumberOfEmployees () { return numberOfEmployees; }
     public void setNumberOfEmployees(int numberOfEmployees) { this.numberOfEmployees = numberOfEmployees; }
 
     public int getCustomerStatistics() { return customerStatistics; }
