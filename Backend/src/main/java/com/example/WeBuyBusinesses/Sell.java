@@ -72,5 +72,21 @@ public class Sell {
     public List<String> getMessages() {
         return messages;
     }
+
+    // Main method
+    public static void main(String[] args) {
+        Sell business = new Sell(100000.0, 50000.0, "REG123", 10, 500, "New York", "Retail", "A thriving retail business.");
+
+        System.out.println("Business Price: $" + business.getPrice());
+        business.setDescription("A highly profitable retail business in New York.");
+        System.out.println("Updated Description: " + business.getDescription());
+
+        business.addImage("image1.jpg");
+        business.sendMessage("Interested in learning more.");
+
+        System.out.println("Image URLs: " + business.getImageUrls());
+        System.out.println("Messages: " + business.getMessages());
+    }
 }
+
 
