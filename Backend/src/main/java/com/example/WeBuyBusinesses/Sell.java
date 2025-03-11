@@ -30,7 +30,7 @@ public class Sell {
         this.messages = new ArrayList<>();
     }
 
-    // Getters and Setters
+    //Getters and Setters
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
