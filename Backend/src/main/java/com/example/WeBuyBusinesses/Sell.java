@@ -37,7 +37,7 @@ public class Sell {
     public double getAnnualProfits () { return annualProfits; }
     public void setAnnualProfits(double annualProfits) { this.annualProfits = annualProfits; }
 
-    public String getRegistrationCode() { return registrationCode; }
+    public String getRegistrationCode () { return registrationCode; }
     public void setRegistrationCode(String registrationCode) { this.registrationCode = registrationCode; }
 
     public int getNumberOfEmployees() { return numberOfEmployees; }
