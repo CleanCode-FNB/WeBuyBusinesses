@@ -43,7 +43,7 @@ public class Sell {
     public int getNumberOfEmployees () { return numberOfEmployees; }
     public void setNumberOfEmployees(int numberOfEmployees) { this.numberOfEmployees = numberOfEmployees; }
 
-    public int getCustomerStatistics() { return customerStatistics; }
+    public int getCustomerStatistics () { return customerStatistics; }
     public void setCustomerStatistics(int customerStatistics) { this.customerStatistics = customerStatistics; }
 
     public String getLocation() { return location; }
