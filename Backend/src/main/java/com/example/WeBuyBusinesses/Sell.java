@@ -31,7 +31,7 @@ public class Sell {
     }
 
     //Getters and Setters
-    public double getPrice() { return price; }
+    public double getPrice () { return price; }
     public void setPrice(double price) { this.price = price; }
 
     public double getAnnualProfits() { return annualProfits; }
