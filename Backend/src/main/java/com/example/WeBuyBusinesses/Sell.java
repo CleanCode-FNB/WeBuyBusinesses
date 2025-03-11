@@ -56,7 +56,7 @@ public class Sell {
     public void setDescription(String description) { this.description = description; }
 
     // Image Upload Feature
-    public void addImage(String imageUrl) {
+    public void addImage (String imageUrl) {
         imageUrls.add(imageUrl);
     }
 
