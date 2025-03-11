@@ -34,7 +34,7 @@ public class Sell {
     public double getPrice () { return price; }
     public void setPrice(double price) { this.price = price; }
 
-    public double getAnnualProfits() { return annualProfits; }
+    public double getAnnualProfits () { return annualProfits; }
     public void setAnnualProfits(double annualProfits) { this.annualProfits = annualProfits; }
 
     public String getRegistrationCode() { return registrationCode; }
