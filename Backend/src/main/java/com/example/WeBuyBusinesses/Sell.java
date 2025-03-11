@@ -65,7 +65,7 @@ public class Sell {
     }
 
     // Messaging Feature
-    public void sendMessage(String message) {
+    public void sendMessage (String message) {
         messages.add(message);
     }
 
