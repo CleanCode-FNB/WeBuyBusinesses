@@ -77,8 +77,8 @@ public class Sell {
     public static void main(String[] args) {
         Sell business = new Sell(100000.0, 50000.0, "REG123", 10, 500, "New York", "Retail", "A thriving retail business.");
 
-        System.out.println("Business Price: $" + business.getPrice());
-        business.setDescription("A highly profitable retail business in New York.");
+        System.out.println("Business Price: R" + business.getPrice());
+        business.setDescription("A highly profitable retail business in SOWETO.");
         System.out.println("Updated Description: " + business.getDescription());
 
         business.addImage("image1.jpg");
