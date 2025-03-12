@@ -1,0 +1,351 @@
+/* Register Page Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar styles */
+.login-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.login-navbar .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.auth-options {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth-options span {
+  color: #7f8c8d;
+}
+
+.signup-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  background: #3498db;
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.signup-btn:hover {
+  background: #2980b9;
+}
+
+/* Main content */
+.login-content {
+  display: flex;
+  flex: 1;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.login-card h1 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Form row for side-by-side inputs */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group.half {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Select styling to match inputs */
+select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background-color: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("https://cdn0.it4profit.com/s3size/el/h/microsoft_800x600.webp");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remember-me label {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.forgot-password {
+  color: #3498db;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.forgot-password:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.error-message {
+  background-color: #fdedee;
+  color: #e74c3c;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Success message styling */
+.success-message {
+  background-color: #e8f7ee;
+  color: #27ae60;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 1.5rem;
+}
+
+.login-button:hover {
+  background: #2980b9;
+}
+
+.login-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #dcdfe6;
+}
+
+.login-divider span {
+  padding: 0 10px;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Social login buttons */
+.social-login {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  border: 1px solid #dcdfe6;
+  background: white;
+  border-radius: 4px;
+  font-weight: 500;
+  color: #34495e;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.social-btn:hover {
+  background: #f8f9fa;
+  border-color: #bdc3c7;
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.google-icon {
+  background-image: url('https://via.placeholder.com/20');
+}
+
+.linkedin-icon {
+  background-image: url('https://via.placeholder.com/20');
+}
+
+/* Login image */
+.login-image {
+  flex: 1;
+  background: url('https://via.placeholder.com/800x600') no-repeat center center/cover;
+  position: relative;
+  display: none;
+}
+
+.login-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+  color: white;
+}
+
+.login-overlay h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.login-overlay p {
+  font-size: 1.1rem;
+  max-width: 500px;
+}
+
+/* Responsive styles */
+@media (min-width: 992px) {
+  .login-image {
+    display: block;
+  }
+  
+  .login-card {
+    max-width: 500px; /* Slightly wider card for registration form */
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 2rem 1rem;
+  }
+  
+  .login-card {
+    padding: 1.5rem;
+  }
+  
+  .auth-options span {
+    display: none;
+  }
+  
+  /* Stack form row on mobile */
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-group.half {
+    margin-bottom: 1.5rem;
+  }
+}

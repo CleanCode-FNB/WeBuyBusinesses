@@ -1,36 +1,26 @@
 package com.example.WeBuyBusinesses.Model;
-import javax.management.relation.Role;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
-    String username;
-
-    @Column(nullable = false)
-    String password;
-
-    @Column(nullable = false)
-    String email;
+    private String name;
+    private String surname;
     
-    @Column(nullable = false)
-    String name;
+    @Column(unique = true)
+    private String email;
+    
+    private String password;
 
-    @Column(nullable = false)
-    String surname;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    Roles role;
+    private String role;  // Storing role as a string ("USER" or "ADMIN")
 }
