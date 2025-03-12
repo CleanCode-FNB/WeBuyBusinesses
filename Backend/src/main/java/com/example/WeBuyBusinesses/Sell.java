@@ -79,7 +79,7 @@ public class Sell {
 
         System.out.println("Business Price: R" + business.getPrice());
         business.setDescription("A highly profitable retail business in SOWETO.");
-        System.out.println("Updated Description: " + business.getDescription());
+        System.out.println("Description: " + business.getDescription());
 
         business.addImage("image1.jpg");
         business.sendMessage("Interested in learning more.");
