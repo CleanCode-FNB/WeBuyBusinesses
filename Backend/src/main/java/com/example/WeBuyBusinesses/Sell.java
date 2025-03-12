@@ -120,18 +120,18 @@ public class Sell {
         System.out.println("Description: " + business.getDescription());
 
         // Adding an image
-        System.out.println("\nEnter an image URL for the business: ");
-        String imageUrl = scanner.nextLine();
-        business.addImage(imageUrl);
+        //System.out.println("\nEnter an image URL for the business: ");
+       // String imageUrl = scanner.nextLine();
+        //business.addImage(imageUrl);
 
         // Sending a message
-        System.out.println("Enter a message to the seller: ");
-        String message = scanner.nextLine();
-        business.sendMessage(message);
+        //System.out.println("Enter a message to the seller: ");
+        //String message = scanner.nextLine();
+        //business.sendMessage(message);
 
         // Display added images and messages
-        System.out.println("\nImage URLs: " + business.getImageUrls());
-        System.out.println("Messages: " + business.getMessages());
+        //System.out.println("\nImage URLs: " + business.getImageUrls());
+        //System.out.println("Messages: " + business.getMessages());
 
         scanner.close();
     }
