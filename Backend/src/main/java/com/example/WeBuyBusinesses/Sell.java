@@ -109,6 +109,7 @@ public class Sell {
                 customerStatistics, location, industry, description);
 
         // Display business details
+        System.out.println("\n-----------------------------------------------------------------------");
         System.out.println("\n---- Business Details ----");
         System.out.println("Price: R" + business.getPrice());
         System.out.println("Annual Profits: R" + business.getAnnualProfits());
@@ -118,7 +119,7 @@ public class Sell {
         System.out.println("Location: " + business.getLocation());
         System.out.println("Industry: " + business.getIndustry());
         System.out.println("Description: " + business.getDescription());
-
+        System.out.println("\n-----------------------------------------------------------------------");
         // Adding an image
         //System.out.println("\nEnter an image URL for the business: ");
        // String imageUrl = scanner.nextLine();
