@@ -1,19 +1,21 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './LandingPage';
-import BusinessDetailsPage from './BusinessDetailsPage';
-import ContactForm from './ContactForm';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import BuyerPage from "./Components/BuyerPage";
+import BusinessDetails from "./Components/BusinessDetails";
+import InquiryForm from "./Components/InquiryForm";
+
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/business/:id" element={<BusinessDetailsPage />} />
-        <Route path="/contact/:businessId" element={<ContactForm />} />
+        <Route path="/" element={<BuyerPage />} />
+        <Route path="/business/:id" element={<BusinessDetails />} />
+        <Route path="/inquiry/:id" element={<InquiryForm />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
