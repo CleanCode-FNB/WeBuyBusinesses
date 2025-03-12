@@ -1,34 +1,34 @@
-import React from 'react';
-import './UserDashboard.css'; // Add some CSS to style the dashboard
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const UserDashboard = () => {
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserDashboard = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:8080/api/user/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setMessage(response.data);
+      } catch (error) {
+        console.error("Error fetching user dashboard:", error);
+        navigate("/login"); // Redirect if unauthorized
+      }
+    };
+    
+    fetchUserDashboard();
+  }, [navigate]);
+
   return (
-    <div className="dashboard">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <h2>WeBuyBusinesses</h2>
-        <ul>
-          <li>Home</li>
-          <li>Dashboard</li>
-          <li>Profile</li>
-          <li>Settings</li>
-        </ul>
-      </div>
-
-      {/* Main Content */}
-      <div className="main-content">
-        <header className="header">
-          <h1>Dashboard</h1>
-          <button className="logout-btn">Logout</button>
-        </header>
-        
-        <div className="content">
-          <h2>Welcome to your Dashboard!</h2>
-          <p>This is where you can manage your account, settings, and more.</p>
-        </div>
-      </div>
+    <div>
+      <h1>User Dashboard</h1>
+      <p>{message}</p>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

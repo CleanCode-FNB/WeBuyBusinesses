@@ -19,11 +19,12 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [id]: value
+      [id]: value,
     }));
   };
 
@@ -31,12 +32,18 @@ const RegisterPage = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/register", formData);
+      const token = localStorage.getItem("token");
+      const response = await axios.post(  "http://localhost:8080/api/auth/register",
+        formData,
+        {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
       setSuccessMessage(response.data || "Registration successful! You can now log in.");
       // Optional: Automatically redirect to login page after successful registration
-      setTimeout(() => navigate("/login"), 3000);
+      setTimeout(() => navigate("/LoginPage"), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Error occurred during registration. Please try again.");
       console.error("Registration failed:", err);
@@ -68,17 +75,6 @@ const RegisterPage = () => {
             )}
             
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Choose a username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
               
               <div className="form-group">
                 <label htmlFor="email">Email</label>

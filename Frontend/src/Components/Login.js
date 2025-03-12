@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import "./Login.css";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: ""
   });
   const [error, setError] = useState("");
@@ -26,11 +26,27 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", credentials);
-      localStorage.setItem("token", response.data);
-      navigate("/dashboard");
+      const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
+        const { token, role } = response.data;
+        console.log("Full Response:", response);
+
+      
+    console.log("Token:", token);  // Check if the token is received
+    console.log("Role:", role);    // Check if the role is received
+
+    // Save token and role in localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+
+
+        // Redirect based on role
+        if (role === "ADMIN") {
+            navigate("/admin-dashboard"); 
+        } else if (role === "USER") {
+            navigate("/user-dashboard"); 
+        }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid username or password");
+      setError(err.response?.data?.message || err.message || "Invalid username or password");
       console.error("Login failed:", err);
     } finally {
       setIsLoading(false);
@@ -57,12 +73,12 @@ const LoginPage = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="email">Email</label>
                 <input
                   type="text"
-                  id="username"
-                  placeholder="Enter your username"
-                  value={credentials.username}
+                  id="email"
+                  placeholder="Enter your email"
+                  value={credentials.email}
                   onChange={handleChange}
                   required
                 />
