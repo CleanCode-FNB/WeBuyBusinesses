@@ -1,19 +1,24 @@
 package com.example.WeBuyBusinesses.Service;
 
-import com.example.WeBuyBusinesses.Model.User;
-import com.example.WeBuyBusinesses.Repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.WeBuyBusinesses.Model.User;
+import com.example.WeBuyBusinesses.Repository.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService {
-
+public class UserServiceImpl implements UserService 
+{
+    
+    private final UserRepository userRepository;
+    
     @Autowired
-    private UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User saveUser(User user) {
@@ -32,11 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByEmail(username);
     }
 
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+   
 }
