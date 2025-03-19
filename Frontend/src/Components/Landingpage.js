@@ -37,7 +37,7 @@ const MarketplaceLanding = () => {
               for business acquisition and sales.
             </p>
             <div className="hero-cta">
-              <button className="cta-button sell">Sell Your Business</button>
+              <button className="cta-button sell" onClick={handleLoginClick}>Sell Your Business</button>
               <button className="cta-button buy">Find a Business</button>
             </div>
             <div className="hero-stats">

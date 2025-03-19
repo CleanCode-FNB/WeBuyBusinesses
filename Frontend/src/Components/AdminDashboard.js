@@ -1,308 +1,392 @@
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com", role: "Buyer", status: "Active" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Seller", status: "Active" },
-    { id: 3, name: "Mike Johnson", email: "mike@example.com", role: "Buyer", status: "Inactive" },
-    { id: 4, name: "Sarah Williams", email: "sarah@example.com", role: "Seller", status: "Active" }
-  ]);
+  const [users, setUsers] = useState([]);
+  const [businesses, setBusinesses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('users');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const navigate = useNavigate();
 
-  const [businesses, setBusinesses] = useState([
-    { id: 1, name: "Tech Solutions", category: "IT Services", price: "$450,000", status: "For Sale" },
-    { id: 2, name: "Fresh Bites", category: "Restaurant", price: "$275,000", status: "For Sale" },
-    { id: 3, name: "Green Landscaping", category: "Home Services", price: "$120,000", status: "Pending" },
-    { id: 4, name: "Modern Fitness", category: "Health & Wellness", price: "$350,000", status: "Sold" }
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // Fetch users and businesses data
+        const usersResponse = await axios.get('http://localhost:8080/api/admin/users');
+        const businessesResponse = await axios.get('http://localhost:8080/api/admin/businesses');
+        
+        setUsers(usersResponse.data || []);
+        setBusinesses(businessesResponse.data || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Mock data for demonstration
+        setUsers([
+          { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', createdAt: '2023-01-15', lastLogin: '2023-03-10' },
+          { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'Active', createdAt: '2023-02-20', lastLogin: '2023-03-15' },
+          { id: 3, name: 'Robert Johnson', email: 'robert@example.com', role: 'Admin', status: 'Active', createdAt: '2022-11-05', lastLogin: '2023-03-18' },
+          { id: 4, name: 'Emily Davis', email: 'emily@example.com', role: 'User', status: 'Inactive', createdAt: '2023-01-28', lastLogin: '2023-02-14' },
+          { id: 5, name: 'Michael Wilson', email: 'michael@example.com', role: 'User', status: 'Active', createdAt: '2022-12-10', lastLogin: '2023-03-17' }
+        ]);
+        
+        setBusinesses([
+          { id: 1, businessName: 'Tech Solutions Inc.', owner: 'John Doe', category: 'Technology', price: 450000, annualRevenue: 780000, status: 'Active', location: 'New York', trend: 'up', createdAt: '2023-01-20' },
+          { id: 2, businessName: 'Healthy Eats Cafe', owner: 'Jane Smith', category: 'Food', price: 180000, annualRevenue: 320000, status: 'Pending', location: 'Los Angeles', trend: 'up', createdAt: '2023-02-15' },
+          { id: 3, businessName: 'Fitness First Gym', owner: 'Robert Johnson', category: 'Health', price: 350000, annualRevenue: 540000, status: 'Active', location: 'Chicago', trend: 'down', createdAt: '2022-12-05' },
+          { id: 4, businessName: 'Fashion Forward', owner: 'Emily Davis', category: 'Retail', price: 275000, annualRevenue: 490000, status: 'Sold', location: 'Miami', trend: 'up', createdAt: '2023-01-10' },
+          { id: 5, businessName: 'Quick Delivery', owner: 'Michael Wilson', category: 'Logistics', price: 520000, annualRevenue: 870000, status: 'Active', location: 'Seattle', trend: 'up', createdAt: '2022-11-28' }
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const [activeTab, setActiveTab] = useState("users");
+    fetchData();
+  }, []);
 
-  const deleteUser = (id) => {
-    setUsers(users.filter(user => user.id !== id));
+  const handleSort = (key) => {
+    const newDirection = sortBy === key && sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortBy(key);
+    setSortDirection(newDirection);
   };
 
-  const deleteBusiness = (id) => {
-    setBusinesses(businesses.filter(business => business.id !== id));
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    navigate('/LoginPage');
   };
 
-  const editUser = (id) => {
-    alert(`Edit user with ID: ${id}`);
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        // await axios.delete(`http://localhost:8080/api/admin/users/${userId}`);
+        setUsers(users.filter(user => user.id !== userId));
+      } catch (error) {
+        console.error("Error deleting user:", error);
+      }
+    }
   };
 
-  const editBusiness = (id) => {
-    alert(`Edit business with ID: ${id}`);
+  const handleDeleteBusiness = async (businessId) => {
+    if (window.confirm('Are you sure you want to delete this business?')) {
+      try {
+        // await axios.delete(`http://localhost:8080/api/admin/businesses/${businessId}`);
+        setBusinesses(businesses.filter(business => business.id !== businessId));
+      } catch (error) {
+        console.error("Error deleting business:", error);
+      }
+    }
+  };
+
+  const handleEditUser = (userId) => {
+    navigate(`/admin/users/edit/${userId}`);
+  };
+
+  const handleEditBusiness = (businessId) => {
+    navigate(`/admin/businesses/edit/${businessId}`);
+  };
+
+  const handleViewUser = (userId) => {
+    navigate(`/admin/users/view/${userId}`);
+  };
+
+  const handleViewBusiness = (businessId) => {
+    navigate(`/admin/businesses/view/${businessId}`);
+  };
+
+  const getSortedData = (data) => {
+    const filtered = data.filter(item => {
+      const searchFields = activeTab === 'users' 
+        ? [item.name, item.email, item.role, item.status]
+        : [item.businessName, item.owner, item.category, item.location, item.status];
+      
+      return searchFields.some(field => 
+        field.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    
+    return filtered.sort((a, b) => {
+      let valueA, valueB;
+      
+      if (activeTab === 'users') {
+        valueA = a[sortBy];
+        valueB = b[sortBy];
+      } else {
+        valueA = sortBy === 'name' ? a.businessName : a[sortBy];
+        valueB = sortBy === 'name' ? b.businessName : b[sortBy];
+      }
+      
+      if (typeof valueA === 'string') {
+        return sortDirection === 'asc' 
+          ? valueA.localeCompare(valueB) 
+          : valueB.localeCompare(valueA);
+      } else {
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+    });
+  };
+
+  const getStatusBadgeClass = (status) => {
+    switch(status.toLowerCase()) {
+      case 'active': return 'status-badge status-active';
+      case 'pending': return 'status-badge status-pending';
+      case 'sold': return 'status-badge status-sold';
+      case 'inactive': return 'status-badge status-inactive';
+      default: return 'status-badge';
+    }
+  };
+
+  const getTrendIcon = (trend) => {
+    if (trend && trend.toLowerCase().includes('up')) return '↗️';
+    if (trend && trend.toLowerCase().includes('down')) return '↘️';
+    return '→';
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sidebar and Main Content Container */}
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-gray-900 h-screen fixed overflow-y-auto">
-          <div className="p-4">
-            <h1 className="text-2xl font-bold text-white mb-6">WeBuyBusinesses</h1>
-            <div className="space-y-1">
-              <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
-                Dashboard
-              </button>
-              <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Users
-              </button>
-              <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="4" y="5" width="16" height="16" rx="2"></rect>
-                  <path d="M16 3v4"></path>
-                  <path d="M8 3v4"></path>
-                  <path d="M4 11h16"></path>
-                </svg>
-                Businesses
-              </button>
-              <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                </svg>
-                Analytics
-              </button>
-              <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-                Settings
-              </button>
+    <div className="admin-dashboard">
+      <div className="sidebar">
+        <div className="sidebar-header">
+          <h2>Admin Panel</h2>
+        </div>
+        <div className="sidebar-menu">
+          <button 
+            className={`sidebar-menu-item ${activeTab === 'users' ? 'active' : ''}`}
+            onClick={() => setActiveTab('users')}
+          >
+            <i className="menu-icon users-icon">👥</i>
+            <span>Users</span>
+          </button>
+          <button 
+            className={`sidebar-menu-item ${activeTab === 'businesses' ? 'active' : ''}`}
+            onClick={() => setActiveTab('businesses')}
+          >
+            <i className="menu-icon business-icon">🏢</i>
+            <span>Businesses</span>
+          </button>
+          <button 
+            className="sidebar-menu-item logout"
+            onClick={handleLogout}
+          >
+            <i className="menu-icon logout-icon">🚪</i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+      
+      <div className="main-content">
+        <div className="admin-header">
+          <h1>{activeTab === 'users' ? 'User Management' : 'Business Management'}</h1>
+          <div className="admin-actions">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder={`Search ${activeTab}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <i className="search-icon">🔍</i>
             </div>
-          </div>
-          <div className="p-4 absolute bottom-0 w-full">
-            <button className="w-full flex items-center justify-start px-3 py-2 text-white hover:bg-gray-800 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-              </svg>
-              Log Out
-            </button>
           </div>
         </div>
-
-        {/* Main content */}
-        <div className="ml-64 flex-1 p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <div className="flex space-x-4">
-              <div className="relative">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Add New
-              </button>
-            </div>
+        
+        {isLoading ? (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading data...</p>
           </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Total Users</p>
-                  <p className="text-3xl font-bold">{users.length}</p>
-                </div>
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                </div>
+        ) : activeTab === 'users' ? (
+          <div className="data-table-wrapper">
+            <div className="data-summary">
+              <div className="summary-card">
+                <h4>Total Users</h4>
+                <p className="summary-value">{users.length}</p>
+              </div>
+              <div className="summary-card">
+                <h4>Active Users</h4>
+                <p className="summary-value">
+                  {users.filter(user => user.status === 'Active').length}
+                </p>
+              </div>
+              <div className="summary-card">
+                <h4>Admin Users</h4>
+                <p className="summary-value">
+                  {users.filter(user => user.role === 'Admin').length}
+                </p>
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Total Businesses</p>
-                  <p className="text-3xl font-bold">{businesses.length}</p>
-                </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="4" y="5" width="16" height="16" rx="2"></rect>
-                    <path d="M16 3v4"></path>
-                    <path d="M8 3v4"></path>
-                    <path d="M4 11h16"></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Active Listings</p>
-                  <p className="text-3xl font-bold">
-                    {businesses.filter(b => b.status === "For Sale").length}
-                  </p>
-                </div>
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Transactions</p>
-                  <p className="text-3xl font-bold">
-                    {businesses.filter(b => b.status === "Sold").length}
-                  </p>
-                </div>
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="8 12 12 16 16 12"></polyline>
-                    <line x1="12" y1="8" x2="12" y2="16"></line>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="mb-6 border-b">
-            <div className="flex">
-              <button 
-                className={`py-2 px-4 font-medium text-lg ${activeTab === 'users' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('users')}
-              >
-                Users
-              </button>
-              <button 
-                className={`py-2 px-4 font-medium text-lg ${activeTab === 'businesses' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('businesses')}
-              >
-                Businesses
-              </button>
-            </div>
-          </div>
-
-          {/* Tab Content */}
-          <div>
-            {activeTab === 'users' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {users.map(user => (
-                  <div key={user.id} className="overflow-hidden bg-white rounded-lg shadow-md">
-                    <div className="bg-gray-50 p-4 border-b">
-                      <h3 className="text-xl font-semibold">{user.name}</h3>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Email:</span>
-                          <span>{user.email}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Role:</span>
-                          <span>{user.role}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Status:</span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            user.status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                          }`}>
-                            {user.status}
-                          </span>
-                        </div>
+            
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th onClick={() => handleSort('name')} className="sortable-header">
+                    Name {sortBy === 'name' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('email')} className="sortable-header">
+                    Email {sortBy === 'email' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('role')} className="sortable-header">
+                    Role {sortBy === 'role' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('status')} className="sortable-header">
+                    Status {sortBy === 'status' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('createdAt')} className="sortable-header">
+                    Registered {sortBy === 'createdAt' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('lastLogin')} className="sortable-header">
+                    Last Login {sortBy === 'lastLogin' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getSortedData(users).map((user) => (
+                  <tr key={user.id} className="data-row">
+                    <td>
+                      <div className="name-cell">
+                        <div className="avatar">{user.name.charAt(0)}</div>
+                        <span>{user.name}</span>
                       </div>
-                      <div className="mt-6 flex space-x-2">
+                    </td>
+                    <td>{user.email}</td>
+                    <td><span className={`role-pill ${user.role.toLowerCase()}`}>{user.role}</span></td>
+                    <td><span className={getStatusBadgeClass(user.status)}>{user.status}</span></td>
+                    <td>{user.createdAt}</td>
+                    <td>{user.lastLogin}</td>
+                    <td>
+                      <div className="action-buttons">
                         <button 
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" 
-                          onClick={() => editUser(user.id)}
+                          className="action-btn view-btn" 
+                          onClick={() => handleViewUser(user.id)}
+                          title="View User"
                         >
-                          Edit
+                          👁️
                         </button>
                         <button 
-                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded" 
-                          onClick={() => deleteUser(user.id)}
+                          className="action-btn edit-btn" 
+                          onClick={() => handleEditUser(user.id)}
+                          title="Edit User"
                         >
-                          Delete
+                          ✏️
+                        </button>
+                        <button 
+                          className="action-btn delete-btn" 
+                          onClick={() => handleDeleteUser(user.id)}
+                          title="Delete User"
+                        >
+                          🗑️
                         </button>
                       </div>
-                    </div>
-                  </div>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            )}
-
-            {activeTab === 'businesses' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {businesses.map(business => (
-                  <div key={business.id} className="overflow-hidden bg-white rounded-lg shadow-md">
-                    <div className="bg-gray-50 p-4 border-b">
-                      <h3 className="text-xl font-semibold">{business.name}</h3>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Category:</span>
-                          <span>{business.category}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Price:</span>
-                          <span className="font-medium">{business.price}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Status:</span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            business.status === "For Sale" ? "bg-green-100 text-green-800" : 
-                            business.status === "Pending" ? "bg-yellow-100 text-yellow-800" : 
-                            "bg-gray-100 text-gray-800"
-                          }`}>
-                            {business.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-6 flex space-x-2">
-                        <button 
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" 
-                          onClick={() => editBusiness(business.id)}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded" 
-                          onClick={() => deleteBusiness(business.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+              </tbody>
+            </table>
           </div>
-        </div>
+        ) : (
+          <div className="data-table-wrapper">
+            <div className="data-summary">
+              <div className="summary-card">
+                <h4>Total Businesses</h4>
+                <p className="summary-value">{businesses.length}</p>
+              </div>
+              <div className="summary-card">
+                <h4>Total Value</h4>
+                <p className="summary-value">
+                  ${businesses.reduce((sum, business) => sum + business.price, 0).toLocaleString()}
+                </p>
+              </div>
+              <div className="summary-card">
+                <h4>Average Revenue</h4>
+                <p className="summary-value">
+                  ${businesses.length > 0 ? (businesses.reduce((sum, business) => sum + business.annualRevenue, 0) / businesses.length).toLocaleString() : 0}
+                </p>
+              </div>
+            </div>
+            
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th onClick={() => handleSort('businessName')} className="sortable-header">
+                    Business Name {sortBy === 'businessName' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('owner')} className="sortable-header">
+                    Owner {sortBy === 'owner' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('category')} className="sortable-header">
+                    Category {sortBy === 'category' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('price')} className="sortable-header">
+                    Price {sortBy === 'price' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('annualRevenue')} className="sortable-header">
+                    Revenue {sortBy === 'annualRevenue' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('status')} className="sortable-header">
+                    Status {sortBy === 'status' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th onClick={() => handleSort('location')} className="sortable-header">
+                    Location {sortBy === 'location' && (sortDirection === 'asc' ? '↓' : '↑')}
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getSortedData(businesses).map((business) => (
+                  <tr key={business.id} className="data-row">
+                    <td>
+                      <div className="business-name-cell">
+                        <div className="business-avatar">{business.businessName.charAt(0)}</div>
+                        <span>{business.businessName}</span>
+                      </div>
+                    </td>
+                    <td>{business.owner}</td>
+                    <td><span className="category-pill">{business.category}</span></td>
+                    <td className="price-cell">${business.price.toLocaleString()}</td>
+                    <td className="revenue-cell">
+                      ${business.annualRevenue.toLocaleString()}
+                      <span className="trend-indicator">{getTrendIcon(business.trend)}</span>
+                    </td>
+                    <td><span className={getStatusBadgeClass(business.status)}>{business.status}</span></td>
+                    <td>{business.location}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button 
+                          className="action-btn view-btn" 
+                          onClick={() => handleViewBusiness(business.id)}
+                          title="View Business"
+                        >
+                          👁️
+                        </button>
+                        <button 
+                          className="action-btn edit-btn" 
+                          onClick={() => handleEditBusiness(business.id)}
+                          title="Edit Business"
+                        >
+                          ✏️
+                        </button>
+                        <button 
+                          className="action-btn delete-btn" 
+                          onClick={() => handleDeleteBusiness(business.id)}
+                          title="Delete Business"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

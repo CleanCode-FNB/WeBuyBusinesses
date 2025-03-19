@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import "./Login.css";
+import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({
@@ -20,40 +21,48 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
-      const { token, role, email, name } = response.data; // Include email & name
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setError("");
 
-      console.log("Token:", token);
-      console.log("Role:", role);
-      console.log("Email:", email);
-      console.log("Name:", name);
-  
-      // Save user info in localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("email", email);
-      localStorage.setItem("name", name);
+  try {
+    // Make the login request
+    const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
+    const { token, role } = response.data;
+    console.log("Full Response:", response);
 
+    // Check if token and role are received
+    console.log("Token:", token);
+    console.log("Role:", role);
 
-        // Redirect based on role
-        if (role === "ADMIN") {
-            navigate("/admin-dashboard"); 
-        } else if (role === "USER") {
-            navigate("/user-dashboard"); 
-        }
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Invalid username or password");
-      console.error("Login failed:", err);
-    } finally {
-      setIsLoading(false);
+    // Save token and role in localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+
+    // Optionally, decode the token to get more user-specific information (e.g., userId)
+    const decodedToken = jwtDecode(token); 
+    console.log("Decoded Token:", decodedToken);
+
+    // Store decoded user information in localStorage (optional)
+    localStorage.setItem("userId", decodedToken.userId); // Assuming userId is in the decoded token
+    console.log("User ID from Token:", decodedToken.userId);
+
+    // Redirect based on role
+    if (role === "ADMIN") {
+      navigate("/admin-dashboard");  // Redirect to admin dashboard
+    } else if (role === "USER") {
+      navigate("/user-dashboard");   // Redirect to user dashboard
     }
-  };
+  } catch (err) {
+    setError(err.response?.data?.message || err.message || "Invalid username or password");
+    console.error("Login failed:", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="login-page">
