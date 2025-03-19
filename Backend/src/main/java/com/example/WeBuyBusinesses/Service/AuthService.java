@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-package com.example.WeBuyBusinesses.Service;import com.example.WeBuyBusinesses.Dto.AuthRequest;
-import com.example.WeBuyBusinesses.Dto.AuthResponse;
-import com.example.WeBuyBusinesses.Dto.RegisterRequest;
-import com.example.WeBuyBusinesses.Model.User;
-import com.example.WeBuyBusinesses.Repository.UserRepository;
-import com.example.WeBuyBusinesses.Security.JwtUtil;
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;import java.util.Optional;
-
-=======
 package com.example.WeBuyBusinesses.Service;import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -23,7 +10,6 @@ import com.example.WeBuyBusinesses.Dto.RegisterRequest;
 import com.example.WeBuyBusinesses.Model.User;
 import com.example.WeBuyBusinesses.Security.JwtUtil;
 
->>>>>>> 106b8a92 (backend commi)
 @Service
 public class AuthService {
     private final UserService userService;
@@ -67,11 +53,7 @@ public class AuthService {
         }
 
         User user = userOptional.get();
-<<<<<<< HEAD
-        String token = jwtUtil.generateToken(user.getEmail());
-=======
         String token = jwtUtil.generateToken(user.getEmail(),user.getId());
->>>>>>> 106b8a92 (backend commi)
 
         return ResponseEntity.ok(new AuthResponse(token, user.getRole(), user.getEmail(), user.getName()));
     }
