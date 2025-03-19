@@ -1,49 +1,61 @@
-package com.example.WeBuyBusinesses.Service;
+package com.example.WeBuyBusinesses.Service;import java.util.Optional;
 
-import com.example.WeBuyBusinesses.Dto.AuthRequest;
-import com.example.WeBuyBusinesses.Dto.RegisterRequest;
-import com.example.WeBuyBusinesses.Model.User;
-import com.example.WeBuyBusinesses.Repository.UserRepository;
-import com.example.WeBuyBusinesses.Security.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.example.WeBuyBusinesses.Dto.AuthRequest;
+import com.example.WeBuyBusinesses.Dto.AuthResponse;
+import com.example.WeBuyBusinesses.Dto.RegisterRequest;
+import com.example.WeBuyBusinesses.Model.User;
+import com.example.WeBuyBusinesses.Security.JwtUtil;
+
 @Service
-
 public class AuthService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public String register(RegisterRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+    public ResponseEntity<?> registerUser(RegisterRequest request) {
+        if (userService.getUserByUsername(request.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already in use");
         }
 
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
         user.setEmail(request.getEmail());
-        user.setRole(request.getRole());
-        
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        userRepository.save(user);
-        return "User registered successfully!";
+        // Ensure role is either "USER" or "ADMIN"
+        String role = request.getRole().toUpperCase();
+        if (!role.equals("USER") && !role.equals("ADMIN")) {
+            return ResponseEntity.badRequest().body("Invalid role. Use 'USER' or 'ADMIN'.");
+        }
+
+        user.setRole(role);
+        userService.saveUser(user);
+
+        return ResponseEntity.ok("User registered successfully");
     }
 
-    public String login(AuthRequest request) {
-        Optional<User> user = userRepository.findByUsername(request.getUsername());
+    public ResponseEntity<?> loginUser(AuthRequest request) {
+        Optional<User> userOptional = userService.getUserByUsername(request.getEmail());
 
-        if (user.isPresent() && passwordEncoder.matches(request.getPassword(), user.get().getPassword())) {
-            return jwtUtil.generateToken(user.get().getUsername());
-        } else {
-            throw new RuntimeException("Invalid username or password");
+        if (userOptional.isEmpty() || !passwordEncoder.matches(request.getPassword(), userOptional.get().getPassword())) {
+            return ResponseEntity.status(401).body("Invalid email or password");
         }
-    }    
+
+        User user = userOptional.get();
+        String token = jwtUtil.generateToken(user.getEmail(),user.getId());
+
+        return ResponseEntity.ok(new AuthResponse(token, user.getRole(), user.getEmail(), user.getName()));
+    }
 }
+
