@@ -27,16 +27,18 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
-        const { token, role } = response.data;
-        console.log("Full Response:", response);
+      const { token, role, email, name } = response.data; // Include email & name
 
-      
-    console.log("Token:", token);  // Check if the token is received
-    console.log("Role:", role);    // Check if the role is received
-
-    // Save token and role in localStorage
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
+      console.log("Token:", token);
+      console.log("Role:", role);
+      console.log("Email:", email);
+      console.log("Name:", name);
+  
+      // Save user info in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("email", email);
+      localStorage.setItem("name", name);
 
 
         // Redirect based on role
