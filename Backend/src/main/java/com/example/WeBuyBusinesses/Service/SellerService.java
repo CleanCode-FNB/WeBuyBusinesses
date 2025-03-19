@@ -9,70 +9,54 @@ import com.example.WeBuyBusinesses.Model.Seller;
 import com.example.WeBuyBusinesses.Model.User;
 import com.example.WeBuyBusinesses.Repository.SellerRepository;
 import com.example.WeBuyBusinesses.Repository.UserRepository;
+import com.example.WeBuyBusinesses.Security.JwtUtil;
 
 @Service
 public class SellerService {
     private final SellerRepository sellerRepository;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    private final UserService userService;
 
-    public SellerService(SellerRepository sellerRepository, UserRepository userRepository) {
+    public SellerService(
+        SellerRepository sellerRepository,
+        UserRepository userRepository,
+        UserService userService,
+        JwtUtil jwtUtil) {
         this.sellerRepository = sellerRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-  // Create a new business (Seller)
-  public Seller createBusiness(Seller seller, Long userId) {
-    // Step 1: Find the user by userId
-    Optional<User> userOptional = userRepository.findById(userId);
-    if (!userOptional.isPresent()) {
-        throw new RuntimeException("User not found with ID: " + userId);
-    }
-
-    // Step 2: Set the user for the seller
-    User user = userOptional.get();
-    seller.setUser(user);
-
-    // Step 3: Save the seller and return it
-    return sellerRepository.save(seller);
-}
-
-    public Optional<Seller> updateBusiness(Long id, Seller updatedSeller, String email) {
-        Optional<Seller> existingSeller = sellerRepository.findById(id);
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        
-        if (existingSeller.isEmpty() || userOptional.isEmpty() || !existingSeller.get().getUser().getEmail().equals(email)) {
-            return Optional.empty();
+   
+    public Seller createBusiness(Seller seller, Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw new RuntimeException("User not found with ID: " + userId);
         }
-
-        Seller seller = existingSeller.get();
-        seller.setBusinessName(updatedSeller.getBusinessName());
-        seller.setCategory(updatedSeller.getCategory());
-        seller.setPrice(updatedSeller.getPrice());
-        seller.setAnnualRevenue(updatedSeller.getAnnualRevenue());
-        seller.setStatus(updatedSeller.getStatus());
-        seller.setLocation(updatedSeller.getLocation());
-        seller.setTrend(updatedSeller.getTrend());
-        
-        return Optional.of(sellerRepository.save(seller));
+        User user = userOptional.get();
+        seller.setUser(user);
+        return sellerRepository.save(seller);
     }
 
-    public List<Seller> getUserBusinesses(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        return userOptional.map(user -> sellerRepository.findByUserId(user.getId())).orElseThrow(() -> new RuntimeException("User not found"));
+   
+    // Get all businesses (sellers) for a specific user
+    public List<Seller> getUserBusinesses(Long userId) {
+        return sellerRepository.findByUserId(userId);
     }
 
-    public Optional<Seller> getBusinessById(Long id, String email) {
-        Optional<Seller> seller = sellerRepository.findById(id);
-        if (seller.isPresent() && seller.get().getUser().getEmail().equals(email)) {
-            return seller;
-        }
-        return Optional.empty();
+    // Get a business by its ID and ensure it belongs to the specified user
+    public Optional<Seller> getBusinessById(Long businessId, Long userId) {
+        Optional<Seller> seller = sellerRepository.findById(businessId);
+        return seller.isPresent() && seller.get().getUser().getId().equals(userId) ? seller : Optional.empty();
     }
 
-    public boolean deleteBusiness(Long id, String email) {
-        Optional<Seller> seller = sellerRepository.findById(id);
-        if (seller.isPresent() && seller.get().getUser().getEmail().equals(email)) {
-            sellerRepository.deleteById(id);
+    // Delete a business listing
+    public boolean deleteBusiness(Long businessId, Long userId) {
+        Optional<Seller> seller = sellerRepository.findById(businessId);
+        if (seller.isPresent() && seller.get().getUser().getId().equals(userId)) {
+            sellerRepository.delete(seller.get());
             return true;
         }
         return false;

@@ -1,14 +1,14 @@
-package com.example.WeBuyBusinesses.Service;import java.util.Optional;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.example.WeBuyBusinesses.Dto.AuthRequest;
+package com.example.WeBuyBusinesses.Service;import com.example.WeBuyBusinesses.Dto.AuthRequest;
 import com.example.WeBuyBusinesses.Dto.AuthResponse;
 import com.example.WeBuyBusinesses.Dto.RegisterRequest;
 import com.example.WeBuyBusinesses.Model.User;
 import com.example.WeBuyBusinesses.Security.JwtUtil;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
