@@ -30,5 +30,10 @@ public class JwtUtil {
                     .getSubject();
         }
 
+        public Long extractUserId(String actualToken) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'extractUserId'");
+        }
+
     
 }
