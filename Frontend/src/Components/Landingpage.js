@@ -11,6 +11,12 @@ const MarketplaceLanding = () => {
     const handleSignUpClick = () => {
       navigate("/register"); // Navigate to Sign Up page
     };
+
+    // Navigate to the BusinessDetails page with the businessId
+  const handleFindBusinessClick = (businessId) => {
+    navigate(`/buyer-dashboard`); // Pass the businessId to the BusinessDetails page
+  };
+
     return (
       <div className="marketplace-container">
         {/* Navigation */}
@@ -38,7 +44,7 @@ const MarketplaceLanding = () => {
             </p>
             <div className="hero-cta">
               <button className="cta-button sell" onClick={handleLoginClick}>Sell Your Business</button>
-              <button className="cta-button buy">Find a Business</button>
+              <button className="cta-button buy" onClick={handleFindBusinessClick}>Find a Business</button> {/* Updated button */}
             </div>
             <div className="hero-stats">
               <div className="stat">
