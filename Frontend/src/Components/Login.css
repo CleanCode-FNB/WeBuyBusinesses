@@ -245,7 +245,7 @@
 /* Login image */
 .login-image {
   flex: 1;
-  background: url('https://via.placeholder.com/800x600') no-repeat center center/cover;
+  background: url('Images/sell.jpg') no-repeat center center/cover;
   position: relative;
   display: none;
 }

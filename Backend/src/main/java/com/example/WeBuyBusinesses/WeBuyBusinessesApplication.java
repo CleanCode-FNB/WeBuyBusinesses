@@ -1,15 +1,16 @@
-package com.example.WeBuyBusinesses;
+package com.example.webuybusinesses;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.example.WeBuyBusinesses")
-public class WeBuyBusinessesApplication {
+@EnableJpaRepositories("com.example.webuybusinesses.Repository")
+public class WebuybusinessesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WeBuyBusinessesApplication.class, args);
+		SpringApplication.run(WebuybusinessesApplication.class, args);
 	}
 
 }

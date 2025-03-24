@@ -11,6 +11,12 @@ const MarketplaceLanding = () => {
     const handleSignUpClick = () => {
       navigate("/register"); // Navigate to Sign Up page
     };
+
+    // Navigate to the BusinessDetails page with the businessId
+  const handleFindBusinessClick = (businessId) => {
+    navigate(`/LoginPage`); // Pass the businessId to the BusinessDetails page
+  };
+
     return (
       <div className="marketplace-container">
         {/* Navigation */}
@@ -37,8 +43,8 @@ const MarketplaceLanding = () => {
               for business acquisition and sales.
             </p>
             <div className="hero-cta">
-              <button className="cta-button sell">Sell Your Business</button>
-              <button className="cta-button buy">Find a Business</button>
+              <button className="cta-button sell" onClick={handleLoginClick}>Sell Your Business</button>
+              <button className="cta-button buy" onClick={handleFindBusinessClick}>Find a Business</button> 
             </div>
             <div className="hero-stats">
               <div className="stat">
@@ -114,8 +120,8 @@ const MarketplaceLanding = () => {
               <div className="listing-content">
                 <h3>Established Retail Store</h3>
                 <p className="listing-location">Los Angeles, CA</p>
-                <p className="listing-price">$750,000</p>
-                <p className="listing-revenue">Annual Revenue: $1.2M</p>
+                <p className="listing-price">R750,000</p>
+                <p className="listing-revenue">Annual Revenue: R1.2M</p>
                 <button className="view-listing-btn">View Details</button>
               </div>
             </div>
@@ -124,8 +130,8 @@ const MarketplaceLanding = () => {
               <div className="listing-content">
                 <h3>SaaS Development Company</h3>
                 <p className="listing-location">Austin, TX</p>
-                <p className="listing-price">$2,500,000</p>
-                <p className="listing-revenue">Annual Revenue: $3.5M</p>
+                <p className="listing-price">R2,500,000</p>
+                <p className="listing-revenue">Annual Revenue: R3.5M</p>
                 <button className="view-listing-btn">View Details</button>
               </div>
             </div>
@@ -135,8 +141,8 @@ const MarketplaceLanding = () => {
               <div className="listing-content">
                 <h3>Premium Restaurant Chain</h3>
                 <p className="listing-location">Chicago, IL</p>
-                <p className="listing-price">$1,800,000</p>
-                <p className="listing-revenue">Annual Revenue: $2.7M</p>
+                <p className="listing-price">R1,800,000</p>
+                <p className="listing-revenue">Annual Revenue: R2.7M</p>
                 <button className="view-listing-btn">View Details</button>
               </div>
             </div>

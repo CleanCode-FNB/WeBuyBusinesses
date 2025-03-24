@@ -7,12 +7,11 @@ import './Registration.css'
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
     password: "",
     email: "",
     name: "",
     surname: "",
-    role: "USER"
+    role: "ADMIN"
   });
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -35,14 +34,14 @@ const RegisterPage = () => {
     setSuccessMessage("");
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(  "http://localhost:8080/api/auth/register",
-        formData,
-        {
-          headers: { 'Authorization': `Bearer ${token}` },
-        });
-      setSuccessMessage(response.data || "Registration successful! You can now log in.");
-      // Optional: Automatically redirect to login page after successful registration
+      // Make the registration request
+      const response = await axios.post("http://localhost:8080/api/auth/register", formData);
+      setSuccessMessage("Registration successful! You can now log in.");
+
+      console.log(formData)
+      
+      console.log(response.data)
+      // Optionally, automatically redirect to login page after successful registration
       setTimeout(() => navigate("/LoginPage"), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Error occurred during registration. Please try again.");
@@ -134,7 +133,8 @@ const RegisterPage = () => {
                   onChange={handleChange}
                   required
                 >
-                  <option value="USER">Business Buyer/Seller</option>
+                  <option value="BUSINESSSELLER">Business Seller</option>
+                  <option value="BUSINESSBUYER">Business buyers</option>
                   <option value="ADMIN">Administrator</option>
                 </select>
               </div>

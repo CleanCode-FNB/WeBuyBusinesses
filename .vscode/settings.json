@@ -1,9 +1,0 @@
-{
-<<<<<<< HEAD
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic"
-=======
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "java.compile.nullAnalysis.mode": "automatic"
->>>>>>> 106b8a92 (backend commi)
-}

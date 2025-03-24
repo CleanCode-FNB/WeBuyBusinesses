@@ -337,15 +337,15 @@ button {
 }
 
 .listing-image.retail {
-  background-image: url('https://via.placeholder.com/400x200');
+  background-image: url('./Images/retail_business.png');
 }
 
 .listing-image.tech {
-  background-image: url('https://via.placeholder.com/400x200');
+  background-image: url('./Images/saas-development-company.webp');
 }
 
 .listing-image.restaurant {
-  background-image: url('https://via.placeholder.com/400x200');
+  background-image: url('./Images/premium\ chain.jpeg');
 }
 
 .listing-content {

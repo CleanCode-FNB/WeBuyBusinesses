@@ -140,7 +140,7 @@ select {
   background-color: white;
   cursor: pointer;
   appearance: none;
-  background-image: url("https://cdn0.it4profit.com/s3size/el/h/microsoft_800x600.webp");
+  background-image: url("");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
@@ -290,7 +290,7 @@ select:focus {
 /* Login image */
 .login-image {
   flex: 1;
-  background: url('https://via.placeholder.com/800x600') no-repeat center center/cover;
+  background: url('Images/sell.jpg') no-repeat center center/cover;
   position: relative;
   display: none;
 }

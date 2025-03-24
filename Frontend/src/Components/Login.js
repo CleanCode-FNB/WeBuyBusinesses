@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
+
+const image = "/images/business1.jpg";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({
@@ -26,27 +28,18 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
-      const { token, role, email, name } = response.data; // Include email & name
-
-      console.log("Token:", token);
-      console.log("Role:", role);
-      console.log("Email:", email);
-      console.log("Name:", name);
-  
-      // Save user info in localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("email", email);
-      localStorage.setItem("name", name);
-
-
-        // Redirect based on role
-        if (role === "ADMIN") {
-            navigate("/admin-dashboard"); 
-        } else if (role === "USER") {
-            navigate("/user-dashboard"); 
-        }
+      const response = await axios.post("http://localhost:8080/api/auth/login", credentials, { withCredentials: true });
+      console.log("Logged in successfully:", response);
+      const user = response.data;
+      if (user.role === "BUSINESSSELLER") {
+        navigate(`/seller/${user.id}`);
+      } else if (user.role === "BUSINESSBUYER") {
+        navigate(`/buyer/${user.id}`);
+      } else if (user.role === "ADMIN") {
+        navigate("/admin-dashboard");
+      } else {
+        setError("Unknown user role");
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Invalid username or password");
       console.error("Login failed:", err);
@@ -76,26 +69,12 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input
-                  type="text"
-                  id="email"
-                  placeholder="Enter your email"
-                  value={credentials.email}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" id="email" placeholder="Enter your email" value={credentials.email} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  value={credentials.password}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="password" id="password" placeholder="Enter your password" value={credentials.password} onChange={handleChange} required />
               </div>
 
               <div className="form-options">
@@ -103,9 +82,7 @@ const LoginPage = () => {
                   <input type="checkbox" id="remember" />
                   <label htmlFor="remember">Remember me</label>
                 </div>
-                <a href="/forgot-password" className="forgot-password">
-                  Forgot password?
-                </a>
+                <a href="/forgot-password" className="forgot-password">Forgot password?</a>
               </div>
 
               {error && <div className="error-message">{error}</div>}
@@ -115,19 +92,11 @@ const LoginPage = () => {
               </button>
             </form>
 
-            <div className="login-divider">
-              <span>or continue with</span>
-            </div>
+            <div className="login-divider"><span>or continue with</span></div>
 
             <div className="social-login">
-              <button className="social-btn google">
-                <div className="social-icon google-icon"></div>
-                Google
-              </button>
-              <button className="social-btn linkedin">
-                <div className="social-icon linkedin-icon"></div>
-                LinkedIn
-              </button>
+              <button className="social-btn google"><div className="social-icon google-icon"></div> Google</button>
+              <button className="social-btn linkedin"><div className="social-icon linkedin-icon"></div> LinkedIn</button>
             </div>
           </div>
         </div>
@@ -135,9 +104,7 @@ const LoginPage = () => {
         <div className="login-image">
           <div className="login-overlay">
             <h2>Find Your Perfect Business Match</h2>
-            <p>
-              Log in to access thousands of business listings and connect with serious buyers and sellers.
-            </p>
+            <p>Log in to access thousands of business listings and connect with serious buyers and sellers.</p>
           </div>
         </div>
       </div>

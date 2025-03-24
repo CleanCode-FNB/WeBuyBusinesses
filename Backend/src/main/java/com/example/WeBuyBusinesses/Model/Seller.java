@@ -1,4 +1,4 @@
-package com.example.WeBuyBusinesses.Model;
+package com.example.webuybusinesses.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
