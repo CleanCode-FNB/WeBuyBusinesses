@@ -46,6 +46,9 @@ npm start
 mvn test  # Run backend tests (JUnit)
 npm test  # Run frontend tests (Jest)
 ```
+
+##Demo video
+https://drive.google.com/drive/folders/1vvHThG2hxlvoPhsUYMdWz_oYhRCQ3qrw?usp=sharing
 ---
 ### ✨ Developed by the Clean Code Team 🚀
 
