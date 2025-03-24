@@ -8,7 +8,8 @@ WORKDIR /app
 COPY . /app
  
 # Install Maven
-RUN apt-get update && apt-get install -y maven
+RUN apt-get update && apt-get upgrade -y && apt-get install -y maven
+
  
 # Build the application with Maven
 RUN mvn clean package
